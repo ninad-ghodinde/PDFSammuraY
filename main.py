@@ -6,13 +6,7 @@ from PyPDF2 import PdfReader
 from groq import Groq
 import streamlit as st
 
-
-from dotenv import load_dotenv
-from pathlib import Path
-
-
-#load_dotenv()
-
+load_dotenv(Path(".env"))
 
 
 #This is for reading text from pdf file
@@ -22,7 +16,6 @@ def extract_text_from_pdf(pdf_file):
   for page in pdf_reader.pages:
     text += page.extract_text()
   return text
-  
 
 
 #This is for making typewriter like effect to print response
@@ -34,9 +27,9 @@ def stream_data(data):
 
 #Calling GROQ API
 #client = Groq(api_key=os.getenv('API_KEY'), )
-client = Groq(api_key="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", )
-#client = Groq(api_key='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',)
-#This is for chat response
+client = Groq(api_key=st.secrets["API_KEY"], )
+
+
 def groq_response(pdf_file, prompt):
   chat_completion = client.chat.completions.create(
       messages=[{
@@ -56,25 +49,25 @@ def groq_response(pdf_file, prompt):
 
 
 st.title('PDFSammuraY 🥷📖✨')
-#st.write((chat_completion.choices[0].message.content))
-#st.write(groq_response(Self,"How is your family in this pdf?"))
 uploaded_file = st.file_uploader("Please upload a PDF file to chat with",
                                  type="pdf")
 data = ""
 if uploaded_file is not None:
   #st.write("file being used:", uploaded_file.name)
   data = extract_text_from_pdf(uploaded_file)
-  
+
 if 'text' not in st.session_state:
   st.session_state.text = 'Summarise the PDF in 100 words'
 
+user_input = st.text_area(
+    "Chat with PDF. Ask me anything",
+    st.session_state['text'],  #"Summarise the PDF in 100 words",
+    key="text")
 
-user_input = st.text_area("Chat with PDF. Ask me anything",
-                          st.session_state['text'],#"Summarise the PDF in 100 words",
-                          key="text")
+
 def submit():
-    st.session_state.text = ''
+  st.session_state.text = ''
 
-if st.button("Submit",on_click=submit):
+
+if st.button("Submit", on_click=submit):
   st.write_stream(stream_data(groq_response(Self, user_input)))
-  
