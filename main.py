@@ -30,7 +30,7 @@ def stream_data(data):
 client = Groq(api_key=st.secrets["API_KEY"], )
 
 
-def groq_response(pdf_file, prompt):
+def groq_response(data, prompt):
   chat_completion = client.chat.completions.create(
       messages=[{
           "role":
@@ -61,13 +61,19 @@ if 'text' not in st.session_state:
 
 user_input = st.text_area(
     "Chat with PDF. Ask me anything",
-    st.session_state['text'],  #"Summarise the PDF in 100 words",
+    st.session_state['text'],
+    #"Summarise the PDF in 100 words",
     key="text")
+
+my_text = st.session_state.get('my_text', '')
 
 
 def submit():
-  st.session_state.text = ''
+  #st.session_state.text = user_input
+  #st.session_state.text = ''
+  st.session_state.my_text = st.session_state.text
+  st.session_state.text = ""
 
 
 if st.button("Submit", on_click=submit):
-  st.write_stream(stream_data(groq_response(Self, user_input)))
+  st.write_stream(stream_data(groq_response(data, st.session_state.my_text)))
