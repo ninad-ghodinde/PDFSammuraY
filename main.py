@@ -6,7 +6,7 @@ from PyPDF2 import PdfReader
 from groq import Groq
 import streamlit as st
 
-load_dotenv(Path(".env"))
+#load_dotenv(Path(".env"))
 
 
 #This is for reading text from pdf file
@@ -36,7 +36,7 @@ def groq_response(data, prompt):
           "role":
           "system",
           "content":
-          "You are a helpful chat exprt.User will be giving you a PDF. Please answer the question which has asked about the PDF. If the question is not related to the PDF, please say 'I don't know politely."
+          "You are a helpful chat assistant.User will be giving you a PDF. Please answer the question which user has asked about the PDF. If the question is not related to the PDF, please say 'I don't know politely.Please do not answer any questionin a way which is not helpful."
       }, {
           "role":
           "user",
@@ -47,33 +47,32 @@ def groq_response(data, prompt):
   )
   return chat_completion.choices[0].message.content
 
-
+st.set_page_config(page_title="PDFSammuraY 🥷📖✨")
 st.title('PDFSammuraY 🥷📖✨')
-uploaded_file = st.file_uploader("Please upload a PDF file to chat with",
+st.markdown('''PDFSammuraY: Your AI-Powered PDF Assistant.\n''')
+
+uploaded_file = st.file_uploader("Please upload a PDF file to get started",
                                  type="pdf")
 data = ""
 if uploaded_file is not None:
-  #st.write("file being used:", uploaded_file.name)
   data = extract_text_from_pdf(uploaded_file)
 
 if 'text' not in st.session_state:
   st.session_state.text = 'Summarise the PDF in 100 words'
 
-user_input = st.text_area(
-    "Chat with PDF. Ask me anything",
-    st.session_state['text'],
-    #"Summarise the PDF in 100 words",
-    key="text")
+user_input = st.text_area(label="What do you want to know about this PDF?",
+                          placeholder="Summarise the PDF in 100 words",
+                          key="text")
 
-my_text = st.session_state.get('my_text', '')
+prompt_text = st.session_state.get('prompt_text', '')
 
 
 def submit():
-  #st.session_state.text = user_input
-  #st.session_state.text = ''
-  st.session_state.my_text = st.session_state.text
+  st.session_state.prompt_text = st.session_state.text
   st.session_state.text = ""
 
 
 if st.button("Submit", on_click=submit):
-  st.write_stream(stream_data(groq_response(data, st.session_state.my_text)))
+  st.write_stream(
+      stream_data(groq_response(data, st.session_state.prompt_text)))
+  
