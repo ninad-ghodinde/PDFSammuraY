@@ -49,7 +49,9 @@ def groq_response(data, prompt):
 
 st.set_page_config(page_title="PDFSammuraY 🥷📖✨")
 st.title('PDFSammuraY 🥷📖✨')
-st.markdown('''PDFSammuraY: Your AI-Powered PDF Assistant.\n''')
+st.markdown(
+    '<span style="font-size: 15px;">PDFSammuraY: Your AI-Powered PDF Assistant.</span>',
+    unsafe_allow_html=True)
 
 uploaded_file = st.file_uploader("Please upload a PDF file to get started",
                                  type="pdf")
