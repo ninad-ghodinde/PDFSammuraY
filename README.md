@@ -1,9 +1,9 @@
 
-# PDFSammuraY
+# PDFSammurAI
 
-PDFSammuraY is an AI-Powered PDF Assistant.It's an open source LLM application designed to interact with your PDF document.
+PDFSammurAI is an AI-Powered PDF Assistant.It's an open source LLM application designed to interact with your PDF document.
 
-The name PDFSammuraY is a combination of PDF and Samurai.
+The name PDFSammurAI is a combination of PDF and Samurai.
 This innovative tool harnesses the power of AI, allowing you to engage in natural language conversations with your PDF files, extracting meaningful information and insights without the need to read through the entire document.
 
 Try it here: https://pdfsammuray.streamlit.app/
